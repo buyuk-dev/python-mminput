@@ -17,17 +17,11 @@ This project contains a script that records audio, detects silence to stop recor
 
 1. Ensure you have the required dependencies installed. You can use the Pipfile to create a virtual environment with the necessary packages:
 
-    ```sh
-    pipenv install
-    ```
-
     **Note for macOS users with M1/M3 chips**: If you encounter issues installing `pyaudio`, you may need to install the `portaudio` library via Homebrew and set the environment variables before installing `pyaudio`. Here are the steps:
 
     ```sh
     brew install portaudio
-    export LDFLAGS="-L/opt/homebrew/opt/portaudio/lib"
-    export CPPFLAGS="-I/opt/homebrew/opt/portaudio/include"
-    pip install pyaudio
+    pipenv install
     ```
 
 2. Run the script:
