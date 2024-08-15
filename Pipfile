@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 pyaudio = "*"
 openai-whisper = "*"
+numpy = "*"
 
 [dev-packages]
 
