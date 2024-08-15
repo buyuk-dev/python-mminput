@@ -24,7 +24,7 @@ This project contains a script that records audio, detects silence to stop recor
 2. Run the script:
 
     ```sh
-    python jarvis.py
+    pipenv run python jarvis.py
     ```
 
 The script will start recording audio. It will stop recording when it detects silence for a specified duration and then transcribe the recorded audio.
