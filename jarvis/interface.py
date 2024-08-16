@@ -1,7 +1,14 @@
 from .engine import record_audio, transcribe_audio_with_ndarray
 
+
 class VoiceRecorder:
-    def __init__(self, silence_threshold=500, silence_duration=3.0, initial_silence_timeout=10.0, target_sample_rate=16000):
+    def __init__(
+        self,
+        silence_threshold=500,
+        silence_duration=3.0,
+        initial_silence_timeout=10.0,
+        target_sample_rate=16000,
+    ):
         self.silence_threshold = silence_threshold
         self.silence_duration = silence_duration
         self.initial_silence_timeout = initial_silence_timeout
@@ -18,7 +25,7 @@ class VoiceRecorder:
             silence_threshold=self.silence_threshold,
             silence_duration=self.silence_duration,
             initial_silence_timeout=self.initial_silence_timeout,
-            target_sample_rate=self.target_sample_rate
+            target_sample_rate=self.target_sample_rate,
         )
 
     def stop_recording(self):
@@ -35,7 +42,9 @@ class Transcriber:
         # Transcribe the given audio data using the transcribe_audio_with_ndarray function from engine.py
         audio_data, sample_format, channels, fs = audio_data
         if self.method == "ndarray":
-            return transcribe_audio_with_ndarray(audio_data, sample_format, channels, fs)
+            return transcribe_audio_with_ndarray(
+                audio_data, sample_format, channels, fs
+            )
         else:
             raise ValueError(f"Unsupported transcription method: {self.method}")
 
@@ -48,12 +57,10 @@ class VoiceInput:
                 "silence_threshold": 500,
                 "silence_duration": 3.0,
                 "initial_silence_timeout": 10.0,
-                "target_sample_rate": 16000
+                "target_sample_rate": 16000,
             }
         if transcriber_config is None:
-            transcriber_config = {
-                "method": "ndarray"
-            }
+            transcriber_config = {"method": "ndarray"}
         self.recorder = VoiceRecorder(**recorder_config)
         self.transcriber = Transcriber(**transcriber_config)
 
@@ -67,4 +74,3 @@ def audio_input():
     """A high-level function to record and transcribe audio with default settings."""
     voice_input = VoiceInput()
     return voice_input.record_and_transcribe()
-

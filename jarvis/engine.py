@@ -4,7 +4,8 @@ import pyaudio
 import numpy as np
 import io
 import tempfile
-#from scipy.signal import resample
+
+# from scipy.signal import resample
 
 # Initialize the Whisper model
 model = whisper.load_model("base.en")
@@ -17,7 +18,10 @@ def is_silent(data, threshold=500):
 
 
 def record_audio(
-    silence_threshold=500, silence_duration=3.0, initial_silence_timeout=10.0, target_sample_rate=16000
+    silence_threshold=500,
+    silence_duration=3.0,
+    initial_silence_timeout=10.0,
+    target_sample_rate=16000,
 ):
     # Set up audio recording parameters
     chunk = 1024  # Record in chunks of 1024 samples
@@ -106,10 +110,12 @@ def main():
     audio_data, sample_format, channels, fs = record_audio(
         silence_threshold=500, silence_duration=3.0, initial_silence_timeout=10.0
     )
-    #transcription_tempfile = transcribe_audio_with_tempfile(audio_data, sample_format, channels, fs)
-    #print(f"Transcription with tempfile: {transcription_tempfile}")
+    # transcription_tempfile = transcribe_audio_with_tempfile(audio_data, sample_format, channels, fs)
+    # print(f"Transcription with tempfile: {transcription_tempfile}")
 
-    transcription_ndarray = transcribe_audio_with_ndarray(audio_data, sample_format, channels, fs)
+    transcription_ndarray = transcribe_audio_with_ndarray(
+        audio_data, sample_format, channels, fs
+    )
     print(f"Transcription with ndarray: {transcription_ndarray}")
 
 
