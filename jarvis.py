@@ -11,7 +11,7 @@ def is_silent(data, threshold=500):
     audio_data = np.frombuffer(data, dtype=np.int16)
     return np.abs(audio_data).mean() < threshold
 
-def record_audio(file_path, silence_threshold=500, silence_duration=3.0):
+def record_audio(file_path, silence_threshold=500, silence_duration=3.0, initial_silence_timeout=10.0):
     # Set up audio recording parameters
     chunk = 1024  # Record in chunks of 1024 samples
     sample_format = pyaudio.paInt16  # 16 bits per sample
@@ -31,18 +31,27 @@ def record_audio(file_path, silence_threshold=500, silence_duration=3.0):
     frames = []  # Initialize array to store frames
     silence_chunks = 0  # Number of chunks with silence
     silence_chunk_threshold = int(fs / chunk * silence_duration)
+    initial_silence_chunks = int(fs / chunk * initial_silence_timeout)
+    sound_detected = False
 
     while True:
         data = stream.read(chunk)
         frames.append(data)
 
-        if is_silent(data, threshold=silence_threshold):
-            silence_chunks += 1
+        if not sound_detected:
+            if not is_silent(data, threshold=silence_threshold):
+                sound_detected = True
+            else:
+                if len(frames) > initial_silence_chunks:
+                    frames = []  # reset frames if initial silence exceeds timeout
         else:
-            silence_chunks = 0
+            if is_silent(data, threshold=silence_threshold):
+                silence_chunks += 1
+            else:
+                silence_chunks = 0
 
-        if silence_chunks > silence_chunk_threshold:
-            break
+            if silence_chunks > silence_chunk_threshold:
+                break
 
     # Stop and close the stream
     stream.stop_stream()
@@ -67,7 +76,7 @@ def transcribe_audio(file_path):
 
 def main():
     audio_file = "output.wav"
-    record_audio(audio_file, silence_threshold=500, silence_duration=3.0)
+    record_audio(audio_file, silence_threshold=500, silence_duration=3.0, initial_silence_timeout=10.0)
     transcription = transcribe_audio(audio_file)
     print(f"Transcription: {transcription}")
 
