@@ -4,8 +4,11 @@ import pyaudio
 import numpy as np
 import io
 import tempfile
+import logging
 
-# from scipy.signal import resample
+# Initialize the logger
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.WARNING)
 
 # Initialize the Whisper model
 model = whisper.load_model("base.en")
@@ -31,7 +34,7 @@ def record_audio(
 
     p = pyaudio.PyAudio()  # Create an interface to PortAudio
 
-    print("Recording")
+    logger.info("Recording")
 
     stream = p.open(
         format=sample_format,
@@ -72,7 +75,7 @@ def record_audio(
     # Terminate the PortAudio interface
     p.terminate()
 
-    print("Finished recording")
+    logger.info("Finished recording")
 
     audio_data = b"".join(frames)
     return audio_data, sample_format, channels, fs

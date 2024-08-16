@@ -1,4 +1,8 @@
 from .engine import record_audio, transcribe_audio_with_ndarray
+import logging
+
+# Initialize the logger
+logger = logging.getLogger(__name__)
 
 
 class VoiceRecorder:
@@ -19,7 +23,7 @@ class VoiceRecorder:
         self.fs = None
 
     def start_recording(self):
-        print("Start recording")
+        logger.info("Start recording")
         # Start recording audio using the record_audio function from engine.py
         self.audio_data, self.sample_format, self.channels, self.fs = record_audio(
             silence_threshold=self.silence_threshold,
@@ -29,7 +33,7 @@ class VoiceRecorder:
         )
 
     def stop_recording(self):
-        print("Stop recording")
+        logger.info("Stop recording")
         # Stops recording and returns audio data
         return self.audio_data, self.sample_format, self.channels, self.fs
 
